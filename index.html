@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Jesus Tabernacle</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#101a24;--panel:#182533;--line:#2a3b4d;--tx:#e9e5dc;--mut:#8c9aa8;--brass:#d1a64a;--serif:'Newsreader',Georgia,serif;--sans:'Instrument Sans',system-ui,sans-serif}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans)}
+#op{display:flex;flex-direction:column;height:100%}
+header{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line)}
+h1{font:600 18px var(--sans);margin:0 8px 0 0}
+button{font:600 14px var(--sans);background:var(--panel);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--brass)}button:focus-visible,input:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+button.on{background:var(--brass);color:#1a1405;border-color:var(--brass)}
+label{font-size:14px;color:var(--mut);display:flex;gap:6px;align-items:center}
+#status{font-size:13px;color:var(--mut);margin-left:auto}
+main{flex:1;display:grid;grid-template-columns:1.3fr 1fr;min-height:0}
+#caps{padding:22px 26px;overflow:auto;border-right:1px solid var(--line);font-size:26px;line-height:1.45}
+#caps p{margin:0 0 .7em;color:var(--mut)}#caps p:last-of-type{color:var(--tx)}#caps .i{color:#6fa3c7}
+aside{display:flex;flex-direction:column;min-height:0;padding:18px;gap:16px}
+#live{border:1px solid var(--line);border-left:4px solid var(--brass);border-radius:6px;padding:14px 16px;background:var(--panel)}
+#live b{display:block;font:600 15px var(--sans);color:var(--brass);margin-bottom:6px}
+#live div{font:400 19px/1.45 var(--serif)}
+#live button{margin-top:10px}
+input[type=text]{width:100%;font:16px var(--sans);padding:10px 12px;background:var(--panel);color:var(--tx);border:1px solid var(--line);border-radius:6px}
+#found{list-style:none;margin:0;padding:0;overflow:auto;flex:1}
+#found li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+#found li div{flex:1;font:400 16px/1.4 var(--serif);color:var(--mut)}#found li strong{display:block;font:600 14px var(--sans);color:var(--tx)}
+#disp-root{display:none;height:100%;background:#000;color:#fff;position:relative;text-align:center}
+#v{font-family:var(--serif);max-height:62vh;max-width:88vw;overflow:hidden;line-height:1.28;position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);transition:opacity .25s}
+#r{position:absolute;bottom:20vh;width:100%;font:600 4.6vh var(--sans);color:var(--brass);transition:opacity .25s}
+#c{position:absolute;bottom:3vh;width:100%;padding:0 6vw;font:400 4vh var(--sans);color:#d8d8d8}
+header input[type=password],header select{font:14px var(--sans);padding:7px 10px;background:var(--panel);color:var(--tx);border:1px solid var(--line);border-radius:6px}
+#pv{position:relative;width:100%;background:#000;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex:none}
+#pv iframe{position:absolute;top:0;left:0;width:1280px;border:0;transform-origin:0 0;pointer-events:none}
+#nav{position:absolute;top:1vh;right:1vh;display:flex;gap:.8vh;opacity:0;transition:opacity .2s;z-index:5}
+#disp-root:hover #nav,#nav:focus-within{opacity:1}
+#nav button{font:600 max(2.8vh,15px) var(--sans);padding:.5vh 1.4vh;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px}
+body.lower #nav{display:none}
+body.drag #disp-root{-webkit-app-region:drag}body.drag #nav{-webkit-app-region:no-drag}
+#credit{padding:6px 18px;font-size:12px;color:var(--mut);border-top:1px solid var(--line)}
+#welcome{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;background:radial-gradient(ellipse at 50% 35%,#1d3347,#0b131b);transition:opacity .6s}
+#welcome.hide{opacity:0;pointer-events:none}
+#welcome img{max-width:220px;max-height:220px;animation:rise .9s ease both}
+#welcome h2{font:600 42px var(--serif);margin:0;animation:rise .9s .25s ease both}
+#welcome p{margin:0;color:var(--mut);font-size:17px;animation:rise .9s .45s ease both}
+#welcome button{margin-top:10px;animation:rise .9s .7s ease both}
+#welcome small{color:var(--mut);animation:rise .9s .9s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#welcome *{animation:none!important}#welcome{transition:none}}
+#v:empty{display:none}
+#r::before{content:"";display:block;width:8vh;height:.45vh;background:currentColor;margin:0 auto 1.4vh;opacity:.7}
+#r:empty::before,body.bar #r::before{display:none}
+#c{text-shadow:0 .2vh .8vh rgba(0,0,0,.6)}
+body.t-royal #disp-root{background:radial-gradient(ellipse at 50% 30%,#1f3a8a,#0b1230)}
+body.t-sunrise #disp-root{background:linear-gradient(160deg,#7c2d12,#b45309 55%,#1c1917)}
+body.t-forest #disp-root{background:linear-gradient(160deg,#052e1c,#14532d 60%,#0a1f14)}
+body.t-light #disp-root{background:#f6f1e7;color:#1c1917}body.t-light #r{color:#8a5a00}body.t-light #c{color:#333;text-shadow:none}
+body.f-elegant #v{font-family:'Playfair Display',Georgia,serif}
+body.f-modern #v{font-family:'Montserrat',system-ui,sans-serif;font-weight:600}
+body.cs-s #c{font-size:3vh}body.cs-l #c{font-size:5.6vh}
+body.bar #v{top:6vh;transform:translateX(-50%)}
+body.bar #r{bottom:4vh;font-size:15vh}
+body.bar #c{display:none}
+body.bar #v:empty~#c{display:block;bottom:auto;top:50%;transform:translateY(-50%);font-size:14vh;line-height:1.2}
+body.lower #disp-root{background:#00b140}
+body.lower #v{top:auto;bottom:17vh;transform:translateX(-50%);max-height:30vh;background:rgba(0,0,0,.78);padding:1.6vh 3vw;border-radius:1vh}
+body.lower #r{bottom:11.5vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
+body.lower #c{bottom:2vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
+@media(max-width:800px){main{grid-template-columns:1fr}#caps{border-right:0;border-bottom:1px solid var(--line);max-height:45vh}}
+@media(prefers-reduced-motion:reduce){#v,#r{transition:none}}
+</style></head><body>
+
+<div id="op">
+<header>
+  <h1>Jesus Tabernacle</h1>
+  <button id="mic">Start listening</button>
+  <button id="openDisp">Open display window</button><button id="popBtn">Pop over EasyWorship</button>
+  <label><input type="checkbox" id="auto" checked> Show matches automatically</label>
+  <label><input type="checkbox" id="capsOn"> Captions on display</label>
+  <label>Display style <select id="style"><option value="full">Full screen</option><option value="bar">Bottom bar (over projector)</option><option value="lower">Lower third, green key</option></select></label>
+  <label>Theme <select id="theme"><option value="classic">Classic black</option><option value="royal">Royal blue</option><option value="sunrise">Sunrise</option><option value="forest">Forest</option><option value="light">Light</option></select></label>
+  <label>Font <select id="font"><option value="serif">Serif</option><option value="elegant">Elegant</option><option value="modern">Modern</option></select></label>
+  <label>Caption size <select id="csize"><option value="s">Small</option><option value="m" selected>Medium</option><option value="l">Large</option></select></label>
+  <label>Speech engine <select id="engine"><option value="dg">Deepgram</option><option value="chrome">Chrome (free)</option></select></label>
+  <select id="micdev" aria-label="Microphone" style="max-width:190px"><option value="">Default microphone</option></select><meter id="lvl" min="0" max="1" low=".05" style="width:60px" aria-label="Mic level"></meter>
+  <input type="password" id="dgkey" placeholder="Deepgram API key" aria-label="Deepgram API key" style="width:210px">
+  <button id="loadWeb">Download KJV</button><button id="load">Load KJV file</button><input type="file" id="file" accept=".json" hidden>
+  <span id="status"></span>
+</header>
+<main>
+  <section id="caps" aria-live="polite"><p>Press “Start listening” and speak. Try: “turn with me to John chapter three verse sixteen”.</p></section>
+  <aside>
+    <div id="pv"><iframe id="pvf" title="Display preview" tabindex="-1"></iframe></div>
+    <div id="live"><b>On display now</b><div>Nothing showing</div></div>
+    <input type="text" id="manual" placeholder="Type a reference, e.g. Romans 8:28, then press Enter">
+    <ul id="found"></ul>
+  </aside>
+</main>
+<div id="credit">Jesus Tabernacle &middot; Built by Tosin Builds</div>
+</div>
+
+<div id="welcome" role="dialog" aria-label="Welcome">
+  <img id="logo" src="logo.png" alt="RCCG logo" onerror="this.style.display='none'">
+  <h2>Jesus Tabernacle</h2><p>Live captions &amp; scripture</p>
+  <button id="go">Get started</button><small>Built by Tosin Builds</small>
+</div>
+
+<div id="disp-root"><div id="v"></div><div id="r"></div><div id="c"></div><div id="nav"><button id="np" aria-label="Previous verse">&lsaquo; Prev</button><button id="nn" aria-label="Next verse">Next &rsaquo;</button><button id="nx" aria-label="Clear">Clear</button></div></div>
+
+<script>
+const ch = new BroadcastChannel('verse-caption');
+const $ = id => document.getElementById(id);
+
+/* ---------- DISPLAY WINDOW (#display) ---------- */
+if (location.hash.startsWith('#display')) {
+  document.getElementById('op').style.display = 'none';
+  const root = $('disp-root'); root.style.display = 'block';
+  document.title = 'Verse Display';
+  let capsOn = false;
+  const fit = () => { const t = $('v'), b = document.body.classList, lim = b.contains('lower') ? .3 : .62; let s = b.contains('lower') ? 5.5 : b.contains('bar') ? 20 : 9; t.style.fontSize = s + 'vh';
+    while (s > 2.2 && (t.scrollHeight > innerHeight * lim || t.scrollWidth > innerWidth * .88)) { s -= .3; t.style.fontSize = s + 'vh'; } };
+  const applyLook = l => { const b = document.body.classList; [...b].filter(c => /^(t|f|cs)-/.test(c)).forEach(c => b.remove(c));
+    b.add('t-' + l.theme, 'f-' + l.font, 'cs-' + l.csize); $('v').textContent && fit(); };
+  const applyStyle = s => { document.body.classList.toggle('lower', s === 'lower'); document.body.classList.toggle('bar', s === 'bar'); $('v').textContent && fit(); };
+  const setVerse = (ref, text) => { $('v').style.opacity = $('r').style.opacity = 0;
+    setTimeout(() => { $('v').textContent = text || ''; $('r').textContent = ref || ''; if (text) fit(); $('v').style.opacity = $('r').style.opacity = 1; }, text || ref ? 120 : 0); };
+  ch.onmessage = ({ data: m }) => {
+    if (m.type === 'verse') setVerse(m.ref, m.text);
+    if (m.type === 'style') applyStyle(m.style);
+    if (m.type === 'look') applyLook(m);
+    if (m.type === 'clear') setVerse('', '');
+    if (m.type === 'capsOn') { capsOn = m.on; if (!capsOn) $('c').textContent = ''; }
+    if (m.type === 'cap') $('c').textContent = !capsOn ? '' : document.body.classList.contains('bar') && m.text.length > 100 ? m.text.slice(-100).replace(/^\S*\s/, '') : m.text;
+    if (m.type === 'state') { capsOn = m.capsOn; applyStyle(m.style); if (m.look) applyLook(m.look); if (m.verse) setVerse(m.verse.ref, m.verse.text); }
+  };
+  addEventListener('resize', () => $('v').textContent && fit());
+  const nav = d => ch.postMessage({ type: 'nav', d }), clr = () => ch.postMessage({ type: 'clearReq' });
+  $('np').onclick = () => nav(-1); $('nn').onclick = () => nav(1); $('nx').onclick = clr;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') nav(1); else if (e.key === 'ArrowLeft' || e.key === 'PageUp') nav(-1); else if (e.key === 'Escape') clr(); });
+  if (/Electron/.test(navigator.userAgent)) document.body.classList.add('drag');
+  applyLook({ theme: 'classic', font: 'serif', csize: 'm' });
+  ch.postMessage({ type: 'hello' });
+} else {
+
+/* ---------- DATA ---------- */
+const SAMPLE = {
+ 'Genesis 1:1':'In the beginning God created the heaven and the earth.',
+ 'Psalms 23:1':'The LORD is my shepherd; I shall not want.',
+ 'Psalms 23:4':'Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.',
+ 'Psalms 46:1':'God is our refuge and strength, a very present help in trouble.',
+ 'Proverbs 3:5':'Trust in the LORD with all thine heart; and lean not unto thine own understanding.',
+ 'Proverbs 3:6':'In all thy ways acknowledge him, and he shall direct thy paths.',
+ 'Isaiah 40:31':'But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.',
+ 'Jeremiah 29:11':'For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.',
+ 'Joshua 1:9':'Have not I commanded thee? Be strong and of a good courage; be not afraid, neither be thou dismayed: for the LORD thy God is with thee whithersoever thou goest.',
+ 'Matthew 6:33':'But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.',
+ 'John 1:1':'In the beginning was the Word, and the Word was with God, and the Word was God.',
+ 'John 3:16':'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.',
+ 'Romans 3:23':'For all have sinned, and come short of the glory of God;',
+ 'Romans 8:28':'And we know that all things work together for good to them that love God, to them who are the called according to his purpose.',
+ 'Romans 10:9':'That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved.',
+ 'Ephesians 2:8':'For by grace are ye saved through faith; and that not of yourselves: it is the gift of God:',
+ 'Ephesians 2:9':'Not of works, lest any man should boast.',
+ 'Philippians 4:13':'I can do all things through Christ which strengtheneth me.',
+ '2 Timothy 1:7':'For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.',
+ 'Hebrews 11:1':'Now faith is the substance of things hoped for, the evidence of things not seen.',
+ '1 John 1:9':'If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.'
+};
+const B=[["Genesis","genesis"],["Exodus","exodus"],["Leviticus","leviticus"],["Numbers","numbers"],["Deuteronomy","deuteronomy"],["Joshua","joshua"],["Judges","judges"],["Ruth","ruth"],["1 Samuel","1 samuel"],["2 Samuel","2 samuel"],["1 Kings","1 kings"],["2 Kings","2 kings"],["1 Chronicles","1 chronicles"],["2 Chronicles","2 chronicles"],["Ezra","ezra"],["Nehemiah","nehemiah"],["Esther","esther"],["Job","job"],["Psalms","psalms?"],["Proverbs","proverbs?"],["Ecclesiastes","ecclesiastes"],["Song of Solomon","song of (?:solomon|songs)|songs of solomon"],["Isaiah","isaiah"],["Jeremiah","jeremiah"],["Lamentations","lamentations"],["Ezekiel","ezekiel"],["Daniel","daniel"],["Hosea","hosea"],["Joel","joel"],["Amos","amos"],["Obadiah","obadiah"],["Jonah","jonah"],["Micah","micah"],["Nahum","nahum"],["Habakkuk","habakkuk"],["Zephaniah","zephaniah"],["Haggai","haggai"],["Zechariah","zechariah"],["Malachi","malachi"],["Matthew","matthew"],["Mark","mark"],["Luke","luke"],["John","john"],["Acts","acts"],["Romans","romans"],["1 Corinthians","1 corinthians"],["2 Corinthians","2 corinthians"],["Galatians","galatians"],["Ephesians","ephesians"],["Philippians","philippians"],["Colossians","colossians"],["1 Thessalonians","1 thessalonians"],["2 Thessalonians","2 thessalonians"],["1 Timothy","1 timothy"],["2 Timothy","2 timothy"],["Titus","titus"],["Philemon","philemon"],["Hebrews","hebrews"],["James","james"],["1 Peter","1 peter"],["2 Peter","2 peter"],["1 John","1 john"],["2 John","2 john"],["3 John","3 john"],["Jude","jude"],["Revelation","revelations?"]];
+const RX = B.map(([name, src]) => [name, new RegExp(
+  '(?<![a-z0-9])' + (/^\d/.test(src) ? '' : '(?<!\\d\\s)') + '(?:' + src.replace(/ /g, '\\s+') + ')(?![a-z])\\s*(?:chapter\\s+)?(\\d{1,3})(?:\\s*(?:verses?|v)?\\s*(\\d{1,3}))?(?:\\s*(?:through|thru|to|and|dash)\\s*(\\d{1,3}))?', 'g')]);
+
+/* ---------- SPOKEN-NUMBER + REFERENCE PARSER ---------- */
+const U={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+const T={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+const ORD={first:1,second:2,third:3,'1st':1,'2nd':2,'3rd':3};
+const unit = w => w in U && U[w] >= 1 && U[w] <= 9;
+function normalize(s) {
+  const t = s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').trim().split(/\s+/), out = [];
+  for (let i = 0; i < t.length; i++) {
+    const w = t[i]; let n = null;
+    if (w in ORD) n = ORD[w];
+    else if (w in T) { n = T[w]; if (unit(t[i+1])) n += U[t[++i]]; }
+    else if (w in U) {
+      n = U[w];
+      if (t[i+1] === 'hundred') { n *= 100; i++; if (t[i+1] === 'and') i++;
+        const x = t[i+1];
+        if (x in T) { n += T[x]; i++; if (unit(t[i+1])) n += U[t[++i]]; }
+        else if (x in U) { n += U[x]; i++; } }
+    }
+    out.push(n === null ? w : String(n));
+  }
+  return out.join(' ');
+}
+function parseRef(raw) {
+  const s = normalize(raw.replace(/(\d)\s*[-–]\s*(\d)/g, '$1 through $2')); let best = null;
+  for (const [book, rx] of RX) { rx.lastIndex = 0;
+    for (const m of s.matchAll(rx)) if (!best || m.index > best.i) {
+      const c = +m[1], v = m[2] ? +m[2] : null, ok = v && v <= 176, v2 = m[3] ? +m[3] : null;
+      best = { i: m.index, book, c, v: ok ? v : null, v2: ok && v2 > v && v2 - v <= 8 ? v2 : null }; } }
+  return best;
+}
+const keyOf = r => { const v = r.v || 1, l = r.v2 || v; return `${r.book} ${r.c}:${v}` + (l > v ? '-' + l : ''); };
+
+/* ---------- STORAGE (full KJV kept in IndexedDB) ---------- */
+const idb = () => new Promise((res, rej) => { const r = indexedDB.open('verse-caption', 1);
+  r.onupgradeneeded = () => r.result.createObjectStore('s'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+const idbGet = async k => { try { const d = await idb(); return await new Promise(r => { const q = d.transaction('s').objectStore('s').get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(); }); } catch { } };
+const idbSet = async (k, v) => { try { const d = await idb(); d.transaction('s', 'readwrite').objectStore('s').put(v, k); } catch { } };
+const nk = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+const canon = n => { if (typeof n === 'number') return (B[n-1] || [])[0];
+  const x = nk(n).replace(/^iii/, '3').replace(/^ii/, '2').replace(/^i(?=[a-z])/, '1'); const f = B.find(b => nk(b[0]) === x); return f && f[0]; };
+function build(j) {
+  const o = {}, clean = t => String(t).replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim();
+  if (Array.isArray(j) && j[0] && j[0].chapters) j.forEach((b, i) => b.chapters.forEach((c, ci) => c.forEach((t, vi) => o[`${B[i][0]} ${ci+1}:${vi+1}`] = clean(t))));
+  else if (Array.isArray(j)) j.forEach(r => { const b = canon(r.book_name || r.book || r.bookName || r.book_id); if (b) o[`${b} ${r.chapter}:${r.verse}`] = clean(r.text); });
+  else Object.keys(j).forEach(k => { const b = canon(k); if (b) for (const c in j[k]) for (const v in j[k][c]) o[`${b} ${c}:${v}`] = clean(j[k][c][v]); });
+  return o;
+}
+
+/* ---------- OPERATOR APP ---------- */
+const wel = $('welcome'); wel.style.display = 'flex';
+const closeWel = () => { wel.classList.add('hide'); setTimeout(() => wel.style.display = 'none', 700); };
+$('go').onclick = closeWel; setTimeout(closeWel, 5000);
+let DB = { ...SAMPLE }, current = null, listening = false, rec = null, pend = null, lastKey = '', lastT = 0, lines = [], capsOn = false, win = null;
+const send = m => ch.postMessage(m);
+const status = t => $('status').textContent = t;
+
+let cur = null;   // position of the verse on screen, used by Previous / Next
+function renderLive() {
+  $('live').innerHTML = current
+    ? `<b>${current.ref}</b><div>${current.text}</div><button id="prv">&larr; Previous verse</button> <button id="nxt">Next verse &rarr;</button> <button id="clr">Clear</button>`
+    : '<b>On display now</b><div>Nothing showing</div>';
+  if (current) { $('clr').onclick = clearLive; $('nxt').onclick = () => step(1); $('prv').onclick = () => step(-1); }
+}
+function step(d) {
+  if (!cur) return;
+  let { book, c, v } = cur; v += d;
+  if (!DB[`${book} ${c}:${v}`]) {
+    if (d > 0 && DB[`${book} ${c + 1}:1`]) { c++; v = 1; }
+    else if (d < 0 && v < 1 && c > 1) { c--; v = 1; while (DB[`${book} ${c}:${v + 1}`]) v++; }
+  }
+  const key = `${book} ${c}:${v}`, text = DB[key];
+  if (!text) { status(d > 0 ? 'No next verse in the loaded text.' : 'No previous verse in the loaded text.'); return; }
+  cur = { book, c, v }; addFound(key, text, cur); show(key, text);
+}
+function show(ref, text) { current = { ref, text }; send({ type: 'verse', ref, text }); renderLive(); }
+function clearLive() { current = null; cur = null; send({ type: 'clear' }); renderLive(); }
+
+function addFound(ref, text, pos) {
+  const li = document.createElement('li');
+  li.innerHTML = `<div><strong>${ref}</strong>${text}</div><button>Show</button>`;
+  li.querySelector('button').onclick = () => { cur = pos; show(ref, text); };
+  $('found').prepend(li);
+}
+function commit(r, force) {
+  const v = r.v || 1, last = r.v2 || v, key = keyOf(r), parts = [];
+  for (let n = v; n <= last; n++) { const t = DB[`${r.book} ${r.c}:${n}`]; if (t) parts.push(t); }
+  const text = parts.join(' ');
+  lastKey = key; lastT = Date.now();
+  if (!text) { status(`${key} isn't in the loaded text. Load the full KJV.`); return; }
+  const pos = { book: r.book, c: r.c, v: last };
+  addFound(key, text, pos);
+  if (force || $('auto').checked) { cur = pos; show(key, text); }
+}
+let tail = '', tailT = 0;
+function handleText(t, final) {
+  if (Date.now() - tailT > 6000) tail = '';
+  const r = parseRef(tail + ' ' + t);
+  if (final) { tail = (tail + ' ' + t).trim().split(/\s+/).slice(-8).join(' '); tailT = Date.now(); }
+  if (!r) return;
+  if (!final && r.v === null) return;                // wait for the verse number on partial results
+  const key = keyOf(r);
+  if (key === lastKey && Date.now() - lastT < 15000) return;
+  clearTimeout(pend); pend = setTimeout(() => commit(r), final ? (r.v ? 0 : 900) : 300);
+}
+
+function renderCaps(interim) {
+  $('caps').innerHTML = lines.slice(-7).map(l => `<p>${l}</p>`).join('') + (interim ? `<p class="i">${interim}</p>` : '');
+  $('caps').scrollTop = 1e9;
+}
+function startRec() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { status('Speech recognition needs Chrome or Edge.'); return; }
+  rec = new SR(); rec.continuous = true; rec.interimResults = true; rec.lang = 'en-US';
+  rec.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript.trim();
+      if (e.results[i].isFinal) { lines.push(t); handleText(t, true); send({ type: 'cap', text: t }); }
+      else interim += t + ' ';
+    }
+    if (interim) { handleText(interim, false); send({ type: 'cap', text: interim }); }
+    renderCaps(interim);
+  };
+  rec.onerror = e => status('Mic error: ' + e.error);
+  rec.onend = () => { if (listening) try { rec.start(); } catch { } };
+  rec.start();
+}
+/* ---- Deepgram streaming (nova-3, book names boosted with keyterms) ---- */
+const KT = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','Samuel','Kings','Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','Corinthians','Galatians','Ephesians','Philippians','Colossians','Thessalonians','Timothy','Titus','Philemon','Hebrews','James','Peter','Jude','Revelation'];
+let ws = null, media = null, mr = null, buf = '';
+let defKey = '';
+try { $('dgkey').value = localStorage.getItem('dgkey') || ''; } catch { }
+if (!$('dgkey').value && window.appConfig) appConfig.get().then(c => { if (c && c.deepgramKey && !/^PASTE/.test(c.deepgramKey)) $('dgkey').value = c.deepgramKey; }).catch(() => { });
+if (window.appConfig) appConfig.get().then(c => { defKey = (c && c.deepgramKey) || ''; if (defKey && !$('dgkey').value) $('dgkey').value = defKey; }).catch(() => { });
+let ac = null, raf = 0;
+async function fillDevs() { try {
+  const d = (await navigator.mediaDevices.enumerateDevices()).filter(x => x.kind === 'audioinput'), cur = $('micdev').value;
+  $('micdev').innerHTML = '<option value="">Default microphone</option>' + d.map(x => `<option value="${x.deviceId}">${(x.label || 'Microphone').replace(/</g, '')}</option>`).join('');
+  $('micdev').value = cur; } catch { } }
+fillDevs();
+function meter(an) { const d = new Uint8Array(an.fftSize);
+  const tick = () => { an.getByteTimeDomainData(d); let m = 0; for (const x of d) m = Math.max(m, Math.abs(x - 128) / 128); $('lvl').value = m; raf = requestAnimationFrame(tick); }; tick(); }
+function stopAll() {
+  rec && rec.stop(); if (ws) { ws.onclose = null; ws.close(); ws = null; }
+  cancelAnimationFrame(raf); $('lvl').value = 0; if (ac) { ac.close(); ac = null; }
+  media && media.getTracks().forEach(t => t.stop()); media = null; buf = '';
+}
+async function startDG() {
+  const key = $('dgkey').value.trim();
+  if (!key) { status('Paste your Deepgram API key first.'); return false; }
+  try { if (key !== defKey) localStorage.setItem('dgkey', key); else localStorage.removeItem('dgkey'); } catch { }
+  try { media = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: $('micdev').value ? { exact: $('micdev').value } : undefined, echoCancellation: false, noiseSuppression: false, autoGainControl: true, channelCount: 1 } }); }
+  catch { status('Microphone blocked or not found. Allow it in the address bar.'); return false; }
+  fillDevs();
+  try {
+    ac = new AudioContext(); await ac.resume();
+    const src = ac.createMediaStreamSource(media), an = ac.createAnalyser(), sp = ac.createScriptProcessor(2048, 1, 1), g = ac.createGain(), ratio = ac.sampleRate / 16000;
+    sp.onaudioprocess = e => {                       // downsample to 16 kHz mono PCM and stream it
+      if (!ws || ws.readyState !== 1) return;
+      const inp = e.inputBuffer.getChannelData(0), n = Math.floor(inp.length / ratio), out = new Int16Array(n);
+      for (let i = 0; i < n; i++) { const a = Math.floor(i * ratio), b = Math.max(a + 1, Math.floor((i + 1) * ratio)); let sum = 0;
+        for (let k = a; k < b; k++) sum += inp[k]; const x = Math.max(-1, Math.min(1, sum / (b - a))); out[i] = x < 0 ? x * 32768 : x * 32767; }
+      ws.send(out.buffer);
+    };
+    g.gain.value = 0; src.connect(sp); src.connect(an); sp.connect(g); g.connect(ac.destination); meter(an);
+  } catch (e) { status('Audio setup failed: ' + (e.name || '') + ' ' + (e.message || '')); stopAll(); return false; }
+  const q = new URLSearchParams({ model: 'nova-3', language: 'en', encoding: 'linear16', sample_rate: '16000', channels: '1', interim_results: 'true', smart_format: 'true', punctuate: 'true', endpointing: '300' });
+  KT.forEach(k => q.append('keyterm', k));
+  let opened = false;
+  ws = new WebSocket('wss://api.deepgram.com/v1/listen?' + q.toString().replace(/\+/g, '%20'), ['token', key]);
+  ws.onopen = () => { opened = true; status('Listening (Deepgram)…'); };
+  ws.onmessage = ev => {
+    const d = JSON.parse(ev.data); if (d.type !== 'Results') return;
+    const t = ((d.channel.alternatives[0] || {}).transcript || '').trim();
+    if (!t) { if (d.speech_final && buf) { lines.push(buf); buf = ''; renderCaps(''); } return; }
+    if (d.is_final) {
+      buf += (buf ? ' ' : '') + t; handleText(t, true); send({ type: 'cap', text: buf });
+      if (d.speech_final) { lines.push(buf); buf = ''; }
+      renderCaps(buf);
+    } else { const shown = (buf ? buf + ' ' : '') + t; handleText(t, false); send({ type: 'cap', text: shown }); renderCaps(shown); }
+  };
+  ws.onerror = () => status(opened ? 'Deepgram connection error.' : 'Could not connect to Deepgram. Check the API key and internet.');
+  ws.onclose = () => { stopAll();
+    if (listening && opened) { status('Reconnecting…'); setTimeout(() => listening && startDG(), 1000); }
+    else if (listening) { listening = false; setMicUI(); } };
+  return true;
+}
+function setMicUI() { $('mic').classList.toggle('on', listening); $('mic').textContent = listening ? 'Stop listening' : 'Start listening'; }
+$('mic').onclick = async () => {
+  if (listening) { listening = false; stopAll(); status(''); setMicUI(); return; }
+  listening = true; setMicUI();
+  let ok = true;
+  if ($('engine').value === 'dg') ok = await startDG(); else { status('Listening…'); startRec(); }
+  if (!ok) { listening = false; setMicUI(); }
+};
+function sizePv() { const w = $('pv').clientWidth, h = $('style').value === 'bar' ? 280 : 720, k = w / 1280;
+  $('pvf').style.height = h + 'px'; $('pvf').style.transform = `scale(${k})`; $('pv').style.height = (h * k) + 'px'; }
+$('pvf').src = location.href.split('#')[0] + '#display'; addEventListener('resize', sizePv); sizePv();
+$('style').onchange = e => { send({ type: 'style', style: e.target.value }); sizePv(); };
+const look = () => ({ theme: $('theme').value, font: $('font').value, csize: $('csize').value });
+['theme', 'font', 'csize'].forEach(i => $(i).onchange = () => send({ type: 'look', ...look() }));
+$('loadWeb').onclick = async () => { status('Downloading KJV…');
+  try { const r = await fetch('https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json');
+    const o = build(JSON.parse((await r.text()).replace(/^\uFEFF/, ''))), n = Object.keys(o).length;
+    if (n < 1000) throw 0; DB = o; await idbSet('kjv', o); status(`Full KJV loaded (${n.toLocaleString()} verses)`); }
+  catch { status('Download failed. Save en_kjv.json from GitHub and use Load KJV file.'); } };
+$('openDisp').onclick = () => { win = window.open(location.href.split('#')[0] + '#display', 'verse-display', $('style').value === 'bar' ? 'width=1280,height=280' : 'width=1280,height=720'); };
+$('popBtn').onclick = async () => {
+  if (/Electron/.test(navigator.userAgent)) {
+    $('style').value = 'bar'; send({ type: 'style', style: 'bar' }); sizePv();
+    $('capsOn').checked = true; capsOn = true; send({ type: 'capsOn', on: true });
+    window.open(location.href.split('#')[0] + '#display', 'verse-display'); return;
+  }
+  if (!window.documentPictureInPicture) { status('Pop-over needs Chrome or Edge 116+. Use Open display window instead.'); return; }
+  try {
+    $('style').value = 'bar'; send({ type: 'style', style: 'bar' }); sizePv();
+    $('capsOn').checked = true; capsOn = true; send({ type: 'capsOn', on: true });
+    const pip = await documentPictureInPicture.requestWindow({ width: 1100, height: 240 });
+    pip.document.body.style.cssText = 'margin:0;background:#000;overflow:hidden';
+    const f = pip.document.createElement('iframe');
+    f.src = location.href.split('#')[0] + '#display'; f.style.cssText = 'border:0;width:100vw;height:100vh;display:block';
+    pip.document.body.append(f);
+    pip.document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') step(1); else if (e.key === 'ArrowLeft' || e.key === 'PageUp') step(-1); });
+  } catch (e) { status('Could not open pop-over: ' + e.message); }
+};
+$('capsOn').onchange = e => { capsOn = e.target.checked; send({ type: 'capsOn', on: capsOn }); };
+$('manual').onkeydown = e => { if (e.key !== 'Enter') return;
+  const r = parseRef(e.target.value.replace(/:/g, ' ')); if (r) { commit(r, true); e.target.value = ''; } else status('Could not read that reference.'); };
+$('load').onclick = () => $('file').click();
+$('file').onchange = async e => { const f = e.target.files[0]; if (!f) return;
+  try { const o = build(JSON.parse(await f.text())), n = Object.keys(o).length;
+    if (n < 1000) throw 0; DB = o; await idbSet('kjv', o); status(`Full KJV loaded (${n.toLocaleString()} verses)`); }
+  catch { status('Could not read that file. See the format notes.'); } };
+ch.onmessage = ({ data: m }) => {
+  if (m.type === 'hello') send({ type: 'state', verse: current, capsOn, style: $('style').value, look: look() });
+  if (m.type === 'nav') step(m.d);
+  if (m.type === 'clearReq') clearLive();
+};
+document.onkeydown = e => {
+  if (e.key === 'Escape') clearLive();
+  if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); step(1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); step(-1); }
+};
+
+(async () => { const saved = await idbGet('kjv');
+  if (saved) { DB = saved; status(`Full KJV loaded (${Object.keys(saved).length.toLocaleString()} verses)`); }
+  else status(`Using ${Object.keys(SAMPLE).length} built-in verses. Load a full KJV JSON file.`); })();
+}
+</script></body></html>
