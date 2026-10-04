@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Jesus Tabernacle</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&family=Montserrat:wght@500;700&family=Syne:wght@600;800&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#101a24;--panel:#182533;--line:#2a3b4d;--tx:#e9e5dc;--mut:#8c9aa8;--brass:#d1a64a;--serif:'Newsreader',Georgia,serif;--sans:'Instrument Sans',system-ui,sans-serif}
 *{box-sizing:border-box}html,body{height:100%;margin:0}
@@ -48,6 +48,19 @@ body.drag #disp-root{-webkit-app-region:drag}body.drag #nav{-webkit-app-region:n
 #welcome small{color:var(--mut);animation:rise .9s .9s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#welcome *{animation:none!important}#welcome{transition:none}}
+#verpanel{display:none;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel);gap:10px 18px;flex-wrap:wrap;align-items:center;font-size:14px}
+#verpanel.open{display:flex}
+mark{color:inherit;background:none}
+mark.hl,mark.jx{padding:.02em .28em;border-radius:.45em;-webkit-box-decoration-break:clone;box-decoration-break:clone;color:#1f1b3a}
+mark.hl{background:var(--ac)}
+mark.jx{background:#ffc9c9;color:#5c0a13}
+#live .hint{font-size:12px;color:var(--mut);margin:8px 0 6px}
+button{box-shadow:3px 3px 0 #05090d;transition:transform .08s,box-shadow .08s}
+button:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--brass)}
+button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--brass)}
+#live,#pv{box-shadow:5px 5px 0 #05090d}
+#welcome button{background:#fff27a;color:#1f1b3a;border:2px solid #1f1b3a;box-shadow:4px 4px 0 var(--brass)}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
 #v:empty{display:none}
 #r::before{content:"";display:block;width:8vh;height:.45vh;background:currentColor;margin:0 auto 1.4vh;opacity:.7}
 #r:empty::before,body.bar #r::before{display:none}
@@ -59,10 +72,23 @@ body.t-light #disp-root{background:#f6f1e7;color:#1c1917}body.t-light #r{color:#
 body.f-elegant #v{font-family:'Playfair Display',Georgia,serif}
 body.f-modern #v{font-family:'Montserrat',system-ui,sans-serif;font-weight:600}
 body.cs-s #c{font-size:3vh}body.cs-l #c{font-size:5.6vh}
-body.bar #v{top:6vh;transform:translateX(-50%)}
-body.bar #r{bottom:4vh;font-size:15vh}
+body{--ink:#1f1b3a;--card:#fffdf6;--tb:#9fd3e6;--ac:#fff27a}
+body.t-royal{--tb:#a9b6f2;--ac:#e8f7a8}body.t-sunrise{--tb:#ffc2a8}body.t-forest{--tb:#b5e6cc}body.t-light{--tb:#cdb4f0}
+#win{display:none}
+body.bar #disp-root{background:transparent;color:var(--ink)}
+body.bar #win{display:block;position:absolute;inset:3vh 2vw 5.5vh 2vw;background:var(--card);border:.55vh solid var(--ink);border-radius:2.4vh;box-shadow:1.4vh 1.4vh 0 var(--ink);overflow:hidden}
+body.bar #tb{display:flex;align-items:center;gap:1.6vh;height:15vh;padding:0 2.6vh;background:var(--tb);border-bottom:.55vh solid var(--ink);font:700 6.4vh/1 'Silkscreen','Courier New',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+body.bar #tb i{flex:none;width:5.4vh;height:5.4vh;border-radius:50%;background:var(--card);border:.45vh solid var(--ink)}
+body.bar #tb i:nth-child(1){background:#ff5f57}body.bar #tb i:nth-child(2){background:#febc2e}body.bar #tb i:nth-child(3){background:#28c840}
+body.bar #tb img{flex:none;height:10.5vh;max-width:22vh;object-fit:contain}
+body.bar #v{top:56.5vh;transform:translate(-50%,-50%);max-height:68vh;max-width:86vw;color:var(--ink)}
+body.bar #r{top:5.3vh;bottom:auto;left:auto;right:4.6vw;width:max-content;max-width:55vw;font:800 6.8vh/1 'Syne',var(--sans);color:var(--ink);background:var(--ac);border:.5vh solid var(--ink);border-radius:99px;padding:.9vh 2.6vh;box-shadow:.6vh .6vh 0 var(--ink)}
+body.bar #r:empty{display:none}
 body.bar #c{display:none}
-body.bar #v:empty~#c{display:block;bottom:auto;top:50%;transform:translateY(-50%);font-size:14vh;line-height:1.2}
+body.bar #v:empty~#c{display:block;left:0;bottom:auto;top:56.5vh;transform:translateY(-50%);font:600 11vh/1.25 var(--sans);color:var(--ink);padding:0 8vw;text-shadow:none}
+body.bar.cs-s #v:empty~#c{font-size:8.5vh}body.bar.cs-l #v:empty~#c{font-size:13vh}
+body.bar #nav{top:auto;bottom:7.5vh;right:4.6vw}
+body.bar #nav button{background:var(--ac);color:var(--ink);border:.5vh solid var(--ink);box-shadow:.5vh .5vh 0 var(--ink);font-family:'Syne',var(--sans);font-weight:800}
 body.lower #disp-root{background:#00b140}
 body.lower #v{top:auto;bottom:17vh;transform:translateX(-50%);max-height:30vh;background:rgba(0,0,0,.78);padding:1.6vh 3vw;border-radius:1vh}
 body.lower #r{bottom:11.5vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
@@ -85,9 +111,17 @@ body.lower #c{bottom:2vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
   <label>Speech engine <select id="engine"><option value="dg">Deepgram</option><option value="chrome">Chrome (free)</option></select></label>
   <select id="micdev" aria-label="Microphone" style="max-width:190px"><option value="">Default microphone</option></select><meter id="lvl" min="0" max="1" low=".05" style="width:60px" aria-label="Mic level"></meter>
   <input type="password" id="dgkey" placeholder="Deepgram API key" aria-label="Deepgram API key" style="width:210px">
-  <button id="loadWeb">Download KJV</button><button id="load">Load KJV file</button><input type="file" id="file" accept=".json" hidden>
+  <label>Bible <select id="ver" aria-label="Bible version"></select></label><button id="addVer">Add versions</button>
   <span id="status"></span>
 </header>
+<div id="verpanel">
+  <span>Free versions:</span>
+  <button data-dl="KJV">Download KJV</button>
+  <button data-dl="BBE">Download Basic English (BBE)</button>
+  <label>Add from a file: name <input id="vname" type="text" placeholder="e.g. WEB" style="width:90px"></label>
+  <button id="load">Choose file&hellip;</button><input type="file" id="file" accept=".json" hidden>
+  <small style="color:var(--mut);flex-basis:100%">Only add versions you have the right to use. NIV, ESV and other licensed versions are not downloaded here.</small>
+</div>
 <main>
   <section id="caps" aria-live="polite"><p>Press “Start listening” and speak. Try: “turn with me to John chapter three verse sixteen”.</p></section>
   <aside>
@@ -106,11 +140,21 @@ body.lower #c{bottom:2vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
   <button id="go">Get started</button><small>Built by Tosin Builds</small>
 </div>
 
-<div id="disp-root"><div id="v"></div><div id="r"></div><div id="c"></div><div id="nav"><button id="np" aria-label="Previous verse">&lsaquo; Prev</button><button id="nn" aria-label="Next verse">Next &rsaquo;</button><button id="nx" aria-label="Clear">Clear</button></div></div>
+<div id="disp-root"><div id="win"><div id="tb"><i></i><i></i><i></i><img src="logo.png" alt="" onerror="this.style.display='none'"><span>Jesus Tabernacle</span></div></div><div id="v"></div><div id="r"></div><div id="c"></div><div id="nav"><button id="np" aria-label="Previous verse">&lsaquo; Prev</button><button id="nn" aria-label="Next verse">Next &rsaquo;</button><button id="nx" aria-label="Clear">Clear</button></div></div>
 
 <script>
 const ch = new BroadcastChannel('verse-caption');
 const $ = id => document.getElementById(id);
+const esc = t => t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+function markup(text, marks) {                       // marks: [{s,e,t:'hl'|'jx'}] as character offsets
+  if (!marks || !marks.length) return esc(text);
+  const ty = new Array(text.length).fill('');
+  marks.forEach(m => { for (let i = m.s; i < m.e && i < ty.length; i++) ty[i] = m.t; });
+  let out = '', i = 0;
+  while (i < text.length) { let j = i; while (j < text.length && ty[j] === ty[i]) j++;
+    const seg = esc(text.slice(i, j)); out += ty[i] ? `<mark class="${ty[i]}">${seg}</mark>` : seg; i = j; }
+  return out;
+}
 
 /* ---------- DISPLAY WINDOW (#display) ---------- */
 if (location.hash.startsWith('#display')) {
@@ -118,21 +162,21 @@ if (location.hash.startsWith('#display')) {
   const root = $('disp-root'); root.style.display = 'block';
   document.title = 'Verse Display';
   let capsOn = false;
-  const fit = () => { const t = $('v'), b = document.body.classList, lim = b.contains('lower') ? .3 : .62; let s = b.contains('lower') ? 5.5 : b.contains('bar') ? 20 : 9; t.style.fontSize = s + 'vh';
+  const fit = () => { const t = $('v'), b = document.body.classList, lim = b.contains('lower') ? .3 : b.contains('bar') ? .68 : .62; let s = b.contains('lower') ? 5.5 : b.contains('bar') ? 20 : 9; t.style.fontSize = s + 'vh';
     while (s > 2.2 && (t.scrollHeight > innerHeight * lim || t.scrollWidth > innerWidth * .88)) { s -= .3; t.style.fontSize = s + 'vh'; } };
   const applyLook = l => { const b = document.body.classList; [...b].filter(c => /^(t|f|cs)-/.test(c)).forEach(c => b.remove(c));
     b.add('t-' + l.theme, 'f-' + l.font, 'cs-' + l.csize); $('v').textContent && fit(); };
   const applyStyle = s => { document.body.classList.toggle('lower', s === 'lower'); document.body.classList.toggle('bar', s === 'bar'); $('v').textContent && fit(); };
-  const setVerse = (ref, text) => { $('v').style.opacity = $('r').style.opacity = 0;
-    setTimeout(() => { $('v').textContent = text || ''; $('r').textContent = ref || ''; if (text) fit(); $('v').style.opacity = $('r').style.opacity = 1; }, text || ref ? 120 : 0); };
+  const setVerse = (ref, text, marks) => { $('v').style.opacity = $('r').style.opacity = 0;
+    setTimeout(() => { $('v').innerHTML = markup(text || '', marks); $('r').textContent = ref || ''; if (text) fit(); $('v').style.opacity = $('r').style.opacity = 1; }, text || ref ? 120 : 0); };
   ch.onmessage = ({ data: m }) => {
-    if (m.type === 'verse') setVerse(m.ref, m.text);
+    if (m.type === 'verse') setVerse(m.ref, m.text, m.marks);
     if (m.type === 'style') applyStyle(m.style);
     if (m.type === 'look') applyLook(m);
     if (m.type === 'clear') setVerse('', '');
     if (m.type === 'capsOn') { capsOn = m.on; if (!capsOn) $('c').textContent = ''; }
     if (m.type === 'cap') $('c').textContent = !capsOn ? '' : document.body.classList.contains('bar') && m.text.length > 100 ? m.text.slice(-100).replace(/^\S*\s/, '') : m.text;
-    if (m.type === 'state') { capsOn = m.capsOn; applyStyle(m.style); if (m.look) applyLook(m.look); if (m.verse) setVerse(m.verse.ref, m.verse.text); }
+    if (m.type === 'state') { capsOn = m.capsOn; applyStyle(m.style); if (m.look) applyLook(m.look); if (m.verse) setVerse(m.verse.ref, m.verse.text, m.verse.marks); }
   };
   addEventListener('resize', () => $('v').textContent && fit());
   const nav = d => ch.postMessage({ type: 'nav', d }), clr = () => ch.postMessage({ type: 'clearReq' });
@@ -226,14 +270,37 @@ const closeWel = () => { wel.classList.add('hide'); setTimeout(() => wel.style.d
 $('go').onclick = closeWel; setTimeout(closeWel, 5000);
 let DB = { ...SAMPLE }, current = null, listening = false, rec = null, pend = null, lastKey = '', lastT = 0, lines = [], capsOn = false, win = null;
 const send = m => ch.postMessage(m);
+const BIBLES = { KJV: SAMPLE }; let ver = 'KJV';
 const status = t => $('status').textContent = t;
 
 let cur = null;   // position of the verse on screen, used by Previous / Next
 function renderLive() {
   $('live').innerHTML = current
-    ? `<b>${current.ref}</b><div>${current.text}</div><button id="prv">&larr; Previous verse</button> <button id="nxt">Next verse &rarr;</button> <button id="clr">Clear</button>`
+    ? `<b>${current.ref}</b><div id="lt">${markup(current.text, current.marks)}</div>
+       <p class="hint">Drag across words, then click a mark. "Jesus spoke" with nothing selected marks the whole verse.</p>
+       <button id="mhl">Highlight</button> <button id="mjx">Jesus spoke</button> <button id="mcl">Remove marks</button><br>
+       <button id="prv">&larr; Previous verse</button> <button id="nxt">Next verse &rarr;</button> <button id="clr">Clear</button>`
     : '<b>On display now</b><div>Nothing showing</div>';
-  if (current) { $('clr').onclick = clearLive; $('nxt').onclick = () => step(1); $('prv').onclick = () => step(-1); }
+  if (current) {
+    $('clr').onclick = clearLive; $('nxt').onclick = () => step(1); $('prv').onclick = () => step(-1);
+    $('mhl').onclick = () => mark('hl'); $('mjx').onclick = () => mark('jx');
+    $('mcl').onclick = () => { current.marks = []; pushMarks(); };
+    document.querySelectorAll('#live button').forEach(b => b.onmousedown = e => e.preventDefault());   // keep the text selection
+  }
+}
+function pushMarks() { send({ type: 'verse', ref: current.ref, text: current.text, marks: current.marks }); renderLive(); }
+function mark(t) {
+  if (!current) return;
+  const box = $('lt'), sel = getSelection(); let s = 0, e = current.text.length;
+  if (sel.rangeCount && !sel.isCollapsed && box.contains(sel.anchorNode) && box.contains(sel.focusNode)) {
+    const r = sel.getRangeAt(0), pre = document.createRange();
+    pre.selectNodeContents(box); pre.setEnd(r.startContainer, r.startOffset);
+    s = pre.toString().length; e = s + r.toString().length;
+    const seg = current.text.slice(s, e); s += seg.length - seg.trimStart().length; e -= seg.length - seg.trimEnd().length;
+    if (e <= s) return;
+  } else if (t === 'hl') { status('Drag across the words you want to highlight first.'); return; }
+  current.marks = current.marks.filter(m => m.e <= s || m.s >= e).concat({ s, e, t });
+  pushMarks();
 }
 function step(d) {
   if (!cur) return;
@@ -244,9 +311,9 @@ function step(d) {
   }
   const key = `${book} ${c}:${v}`, text = DB[key];
   if (!text) { status(d > 0 ? 'No next verse in the loaded text.' : 'No previous verse in the loaded text.'); return; }
-  cur = { book, c, v }; addFound(key, text, cur); show(key, text);
+  cur = { book, c, v }; const L = `${key} (${ver})`; addFound(L, text, cur); show(L, text);
 }
-function show(ref, text) { current = { ref, text }; send({ type: 'verse', ref, text }); renderLive(); }
+function show(ref, text) { current = { ref, text, marks: [] }; send({ type: 'verse', ref, text, marks: [] }); renderLive(); }
 function clearLive() { current = null; cur = null; send({ type: 'clear' }); renderLive(); }
 
 function addFound(ref, text, pos) {
@@ -260,10 +327,11 @@ function commit(r, force) {
   for (let n = v; n <= last; n++) { const t = DB[`${r.book} ${r.c}:${n}`]; if (t) parts.push(t); }
   const text = parts.join(' ');
   lastKey = key; lastT = Date.now();
-  if (!text) { status(`${key} isn't in the loaded text. Load the full KJV.`); return; }
+  if (!text) { status(`${key} isn't in ${ver}. Add the full version (Add versions).`); return; }
   const pos = { book: r.book, c: r.c, v: last };
-  addFound(key, text, pos);
-  if (force || $('auto').checked) { cur = pos; show(key, text); }
+  const L = `${key} (${ver})`;
+  addFound(L, text, pos);
+  if (force || $('auto').checked) { cur = pos; show(L, text); }
 }
 let tail = '', tailT = 0;
 function handleText(t, final) {
@@ -373,11 +441,38 @@ $('pvf').src = location.href.split('#')[0] + '#display'; addEventListener('resiz
 $('style').onchange = e => { send({ type: 'style', style: e.target.value }); sizePv(); };
 const look = () => ({ theme: $('theme').value, font: $('font').value, csize: $('csize').value });
 ['theme', 'font', 'csize'].forEach(i => $(i).onchange = () => send({ type: 'look', ...look() }));
-$('loadWeb').onclick = async () => { status('Downloading KJV…');
-  try { const r = await fetch('https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json');
-    const o = build(JSON.parse((await r.text()).replace(/^\uFEFF/, ''))), n = Object.keys(o).length;
-    if (n < 1000) throw 0; DB = o; await idbSet('kjv', o); status(`Full KJV loaded (${n.toLocaleString()} verses)`); }
-  catch { status('Download failed. Save en_kjv.json from GitHub and use Load KJV file.'); } };
+const SOURCES = {
+  KJV: 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json',
+  BBE: 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_bbe.json' };
+function fillVer() { $('ver').innerHTML = Object.keys(BIBLES).map(n => `<option>${n}</option>`).join(''); $('ver').value = ver; }
+function setVer(n) {
+  if (!BIBLES[n]) return; ver = n; DB = BIBLES[n]; $('ver').value = n;
+  try { localStorage.setItem('ver', n); } catch { }
+  if (cur && current) { const k = `${cur.book} ${cur.c}:${cur.v}`; if (DB[k]) show(`${k} (${ver})`, DB[k]); else status(`${k} isn't in ${ver}.`); }
+}
+async function addVersion(name, obj) {
+  const n = Object.keys(obj).length; if (n < 1000) throw 0;
+  BIBLES[name] = obj; await idbSet('bible:' + name, obj);
+  await idbSet('versions', Object.keys(BIBLES).filter(k => BIBLES[k] !== SAMPLE));
+  fillVer(); setVer(name); status(`${name} loaded (${n.toLocaleString()} verses)`);
+}
+const parseBible = async t => build(JSON.parse(t.replace(/^\uFEFF/, '')));
+async function download(name) {
+  status(`Downloading ${name}…`);
+  try { const r = await fetch(SOURCES[name]); await addVersion(name, await parseBible(await r.text())); }
+  catch { status('Download failed. Check the internet, or add the file by hand.'); }
+}
+document.querySelectorAll('[data-dl]').forEach(b => b.onclick = () => download(b.dataset.dl));
+$('addVer').onclick = () => $('verpanel').classList.toggle('open');
+$('ver').onchange = e => setVer(e.target.value);
+$('load').onclick = () => { if (!$('vname').value.trim()) { status('Type a short name for the version first (for example WEB).'); return; } $('file').click(); };
+$('file').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const name = $('vname').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10) || 'CUSTOM';
+  try { await addVersion(name, await parseBible(await f.text())); $('vname').value = ''; }
+  catch { status('Could not read that file. It should be a Bible JSON with all 66 books.'); }
+  e.target.value = '';
+};
 $('openDisp').onclick = () => { win = window.open(location.href.split('#')[0] + '#display', 'verse-display', $('style').value === 'bar' ? 'width=1280,height=280' : 'width=1280,height=720'); };
 $('popBtn').onclick = async () => {
   if (/Electron/.test(navigator.userAgent)) {
@@ -401,11 +496,7 @@ $('popBtn').onclick = async () => {
 $('capsOn').onchange = e => { capsOn = e.target.checked; send({ type: 'capsOn', on: capsOn }); };
 $('manual').onkeydown = e => { if (e.key !== 'Enter') return;
   const r = parseRef(e.target.value.replace(/:/g, ' ')); if (r) { commit(r, true); e.target.value = ''; } else status('Could not read that reference.'); };
-$('load').onclick = () => $('file').click();
-$('file').onchange = async e => { const f = e.target.files[0]; if (!f) return;
-  try { const o = build(JSON.parse(await f.text())), n = Object.keys(o).length;
-    if (n < 1000) throw 0; DB = o; await idbSet('kjv', o); status(`Full KJV loaded (${n.toLocaleString()} verses)`); }
-  catch { status('Could not read that file. See the format notes.'); } };
+
 ch.onmessage = ({ data: m }) => {
   if (m.type === 'hello') send({ type: 'state', verse: current, capsOn, style: $('style').value, look: look() });
   if (m.type === 'nav') step(m.d);
@@ -418,8 +509,14 @@ document.onkeydown = e => {
   if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); step(-1); }
 };
 
-(async () => { const saved = await idbGet('kjv');
-  if (saved) { DB = saved; status(`Full KJV loaded (${Object.keys(saved).length.toLocaleString()} verses)`); }
-  else status(`Using ${Object.keys(SAMPLE).length} built-in verses. Load a full KJV JSON file.`); })();
+(async () => {
+  const names = (await idbGet('versions')) || [], legacy = await idbGet('kjv');
+  if (legacy && !names.includes('KJV')) { await idbSet('bible:KJV', legacy); names.push('KJV'); await idbSet('versions', names); }
+  for (const n of names) { const o = await idbGet('bible:' + n); if (o) BIBLES[n] = o; }
+  fillVer();
+  let want = 'KJV'; try { want = localStorage.getItem('ver') || 'KJV'; } catch { }
+  setVer(BIBLES[want] ? want : Object.keys(BIBLES)[0]);
+  status(names.length ? `Versions ready: ${names.join(', ')}` : `Using ${Object.keys(SAMPLE).length} built-in verses. Click Add versions to download the full KJV.`);
+})();
 }
 </script></body></html>

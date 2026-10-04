@@ -1,6 +1,6 @@
 {
   "name": "church-display",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Jesus Tabernacle: live captions and scripture overlay for church services",
   "main": "main.js",
   "author": "Tosin Builds",
