@@ -6,6 +6,12 @@ let op = null, out = null;
 let cfg = {};
 try { cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8')); } catch { }
 ipcMain.handle('cfg', () => cfg);
+// Bible JSON files placed in the bibles/ folder are loaded at start-up, so no download is needed.
+ipcMain.handle('bibles', () => {
+  const dir = path.join(__dirname, 'bibles'), out = [];
+  try { for (const f of fs.readdirSync(dir)) if (/\.json$/i.test(f)) out.push({ file: f, text: fs.readFileSync(path.join(dir, f), 'utf8') }); } catch { }
+  return out;
+});
 
 const prefs = { backgroundThrottling: false, preload: path.join(__dirname, 'preload.js') };
 
@@ -20,8 +26,8 @@ function openOverlay() {
   const d = targetDisplay(), h = Math.round(d.bounds.height * 0.24);
   out = new BrowserWindow({
     x: d.bounds.x, y: d.bounds.y + d.bounds.height - h, width: d.bounds.width, height: h,
-    frame: false, resizable: true, alwaysOnTop: true, skipTaskbar: true, hasShadow: false,
-    backgroundColor: '#000000', webPreferences: prefs
+    frame: false, transparent: true, resizable: false, alwaysOnTop: true, skipTaskbar: true, hasShadow: false,
+    backgroundColor: '#00000000', webPreferences: prefs
   });
   out.setAlwaysOnTop(true, 'screen-saver');   // stay above EasyWorship's output window
   out.loadFile('index.html', { hash: 'display' });

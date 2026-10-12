@@ -1,8 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Jesus Tabernacle</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&family=Montserrat:wght@500;700&family=Syne:wght@600;800&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'Silkscreen';src:local('Silkscreen'),url('fonts/pixel.ttf');font-weight:400 700;font-display:swap}
+@font-face{font-family:'Syne';src:local('Syne'),url('fonts/heading.ttf');font-weight:400 800;font-display:swap}
+@font-face{font-family:'Newsreader';src:local('Newsreader'),url('fonts/verse.ttf');font-weight:200 800;font-display:swap}
+@font-face{font-family:'Instrument Sans';src:local('Instrument Sans'),url('fonts/ui.ttf');font-weight:400 700;font-display:swap}
+@font-face{font-family:'Playfair Display';src:local('Playfair Display'),url('fonts/elegant.ttf');font-weight:400 900;font-display:swap}
+@font-face{font-family:'Montserrat';src:local('Montserrat'),url('fonts/modern.ttf');font-weight:100 900;font-display:swap}
 :root{--bg:#101a24;--panel:#182533;--line:#2a3b4d;--tx:#e9e5dc;--mut:#8c9aa8;--brass:#d1a64a;--serif:'Newsreader',Georgia,serif;--sans:'Instrument Sans',system-ui,sans-serif}
 *{box-sizing:border-box}html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--tx);font-family:var(--sans)}
@@ -55,12 +60,21 @@ mark.hl,mark.jx{padding:.02em .28em;border-radius:.45em;-webkit-box-decoration-b
 mark.hl{background:var(--ac)}
 mark.jx{background:#ffc9c9;color:#5c0a13}
 #live .hint{font-size:12px;color:var(--mut);margin:8px 0 6px}
+#lt{cursor:text;user-select:text;padding:8px 10px;border:1px dashed var(--line);border-radius:6px}
+#lt::selection{background:var(--brass);color:#1a1405}
 button{box-shadow:3px 3px 0 #05090d;transition:transform .08s,box-shadow .08s}
 button:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--brass)}
 button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--brass)}
 #live,#pv{box-shadow:5px 5px 0 #05090d}
 #welcome button{background:#fff27a;color:#1f1b3a;border:2px solid #1f1b3a;box-shadow:4px 4px 0 var(--brass)}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
+input[type=color]{width:34px;height:28px;padding:0;border:1px solid var(--line);background:var(--panel);border-radius:6px;cursor:pointer}
+#sugg{border:1px solid var(--line);border-left:4px solid #6fa3c7;border-radius:6px;padding:10px 14px;background:var(--panel);box-shadow:5px 5px 0 #05090d}
+#sugg[hidden]{display:none}
+#sugg b{display:block;font:600 14px var(--sans);color:#6fa3c7;margin-bottom:4px}#sugg small{font-weight:400;color:var(--mut)}
+.sg{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line)}
+.sg kbd{font:600 12px var(--sans);border:1px solid var(--line);border-radius:4px;padding:2px 7px;color:var(--mut);margin-top:2px}
+.sg div{flex:1;font:400 14px/1.35 var(--serif);color:var(--mut)}.sg strong{display:block;font:600 14px var(--sans);color:var(--tx)}
 #v:empty{display:none}
 #r::before{content:"";display:block;width:8vh;height:.45vh;background:currentColor;margin:0 auto 1.4vh;opacity:.7}
 #r:empty::before,body.bar #r::before{display:none}
@@ -76,19 +90,19 @@ body{--ink:#1f1b3a;--card:#fffdf6;--tb:#9fd3e6;--ac:#fff27a}
 body.t-royal{--tb:#a9b6f2;--ac:#e8f7a8}body.t-sunrise{--tb:#ffc2a8}body.t-forest{--tb:#b5e6cc}body.t-light{--tb:#cdb4f0}
 #win{display:none}
 body.bar #disp-root{background:transparent;color:var(--ink)}
-body.bar #win{display:block;position:absolute;inset:3vh 2vw 5.5vh 2vw;background:var(--card);border:.55vh solid var(--ink);border-radius:2.4vh;box-shadow:1.4vh 1.4vh 0 var(--ink);overflow:hidden}
+body.bar #win{display:block;position:absolute;inset:3vh 2vw 6.5vh 3.2vw;background:var(--card);border:.55vh solid var(--ink);border-radius:1.2vh;box-shadow:-4.2vh 4.2vh 0 var(--ink);overflow:hidden}
 body.bar #tb{display:flex;align-items:center;gap:1.6vh;height:15vh;padding:0 2.6vh;background:var(--tb);border-bottom:.55vh solid var(--ink);font:700 6.4vh/1 'Silkscreen','Courier New',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
 body.bar #tb i{flex:none;width:5.4vh;height:5.4vh;border-radius:50%;background:var(--card);border:.45vh solid var(--ink)}
 body.bar #tb i:nth-child(1){background:#ff5f57}body.bar #tb i:nth-child(2){background:#febc2e}body.bar #tb i:nth-child(3){background:#28c840}
 body.bar #tb img{flex:none;height:10.5vh;max-width:22vh;object-fit:contain}
 body.bar #v{top:56.5vh;transform:translate(-50%,-50%);max-height:68vh;max-width:86vw;color:var(--ink)}
-body.bar #r{top:5.3vh;bottom:auto;left:auto;right:4.6vw;width:max-content;max-width:55vw;font:800 6.8vh/1 'Syne',var(--sans);color:var(--ink);background:var(--ac);border:.5vh solid var(--ink);border-radius:99px;padding:.9vh 2.6vh;box-shadow:.6vh .6vh 0 var(--ink)}
+body.bar #r{top:5.3vh;bottom:auto;left:auto;right:4.6vw;width:max-content;max-width:55vw;font:800 6.8vh/1 'Syne',var(--sans);color:var(--ink);background:var(--ac);border:.5vh solid var(--ink);border-radius:99px;padding:.9vh 2.6vh;box-shadow:-.8vh .8vh 0 var(--ink)}
 body.bar #r:empty{display:none}
 body.bar #c{display:none}
 body.bar #v:empty~#c{display:block;left:0;bottom:auto;top:56.5vh;transform:translateY(-50%);font:600 11vh/1.25 var(--sans);color:var(--ink);padding:0 8vw;text-shadow:none}
 body.bar.cs-s #v:empty~#c{font-size:8.5vh}body.bar.cs-l #v:empty~#c{font-size:13vh}
 body.bar #nav{top:auto;bottom:7.5vh;right:4.6vw}
-body.bar #nav button{background:var(--ac);color:var(--ink);border:.5vh solid var(--ink);box-shadow:.5vh .5vh 0 var(--ink);font-family:'Syne',var(--sans);font-weight:800}
+body.bar #nav button{background:var(--ac);color:var(--ink);border:.5vh solid var(--ink);border-radius:0;box-shadow:-.6vh .6vh 0 var(--ink);font-family:'Silkscreen','Courier New',monospace;font-weight:700}
 body.lower #disp-root{background:#00b140}
 body.lower #v{top:auto;bottom:17vh;transform:translateX(-50%);max-height:30vh;background:rgba(0,0,0,.78);padding:1.6vh 3vw;border-radius:1vh}
 body.lower #r{bottom:11.5vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
@@ -106,9 +120,12 @@ body.lower #c{bottom:2vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
   <label><input type="checkbox" id="capsOn"> Captions on display</label>
   <label>Display style <select id="style"><option value="full">Full screen</option><option value="bar">Bottom bar (over projector)</option><option value="lower">Lower third, green key</option></select></label>
   <label>Theme <select id="theme"><option value="classic">Classic black</option><option value="royal">Royal blue</option><option value="sunrise">Sunrise</option><option value="forest">Forest</option><option value="light">Light</option></select></label>
+  <label>Bar <input type="color" id="cTb" value="#9fd3e6" aria-label="Title bar colour"></label>
+  <label>Pill <input type="color" id="cAc" value="#fff27a" aria-label="Highlight and pill colour"></label>
   <label>Font <select id="font"><option value="serif">Serif</option><option value="elegant">Elegant</option><option value="modern">Modern</option></select></label>
   <label>Caption size <select id="csize"><option value="s">Small</option><option value="m" selected>Medium</option><option value="l">Large</option></select></label>
-  <label>Speech engine <select id="engine"><option value="dg">Deepgram</option><option value="chrome">Chrome (free)</option></select></label>
+  <label>Voice commands <select id="voice"><option value="verse">Verse numbers</option><option value="next">Verse numbers + "next verse"</option><option value="off">Off</option></select></label>
+  <label>Speech engine <select id="engine"><option value="dg">Deepgram</option><option value="dgl">Deepgram (low data)</option><option value="vosk">Offline (Vosk helper)</option><option value="chrome">Chrome (free)</option></select></label>
   <select id="micdev" aria-label="Microphone" style="max-width:190px"><option value="">Default microphone</option></select><meter id="lvl" min="0" max="1" low=".05" style="width:60px" aria-label="Mic level"></meter>
   <input type="password" id="dgkey" placeholder="Deepgram API key" aria-label="Deepgram API key" style="width:210px">
   <label>Bible <select id="ver" aria-label="Bible version"></select></label><button id="addVer">Add versions</button>
@@ -127,6 +144,7 @@ body.lower #c{bottom:2vh;text-shadow:0 0 1vh #000,0 0 2vh #000}
   <aside>
     <div id="pv"><iframe id="pvf" title="Display preview" tabindex="-1"></iframe></div>
     <div id="live"><b>On display now</b><div>Nothing showing</div></div>
+    <div id="sugg" hidden><b>Did you mean? <small>(press 1, 2 or 3)</small></b><div id="sglist"></div></div>
     <input type="text" id="manual" placeholder="Type a reference, e.g. Romans 8:28, then press Enter">
     <ul id="found"></ul>
   </aside>
@@ -165,7 +183,8 @@ if (location.hash.startsWith('#display')) {
   const fit = () => { const t = $('v'), b = document.body.classList, lim = b.contains('lower') ? .3 : b.contains('bar') ? .68 : .62; let s = b.contains('lower') ? 5.5 : b.contains('bar') ? 20 : 9; t.style.fontSize = s + 'vh';
     while (s > 2.2 && (t.scrollHeight > innerHeight * lim || t.scrollWidth > innerWidth * .88)) { s -= .3; t.style.fontSize = s + 'vh'; } };
   const applyLook = l => { const b = document.body.classList; [...b].filter(c => /^(t|f|cs)-/.test(c)).forEach(c => b.remove(c));
-    b.add('t-' + l.theme, 'f-' + l.font, 'cs-' + l.csize); $('v').textContent && fit(); };
+    b.add('t-' + l.theme, 'f-' + l.font, 'cs-' + l.csize);
+    if (l.tb) document.body.style.setProperty('--tb', l.tb); if (l.ac) document.body.style.setProperty('--ac', l.ac); $('v').textContent && fit(); };
   const applyStyle = s => { document.body.classList.toggle('lower', s === 'lower'); document.body.classList.toggle('bar', s === 'bar'); $('v').textContent && fit(); };
   const setVerse = (ref, text, marks) => { $('v').style.opacity = $('r').style.opacity = 0;
     setTimeout(() => { $('v').innerHTML = markup(text || '', marks); $('r').textContent = ref || ''; if (text) fit(); $('v').style.opacity = $('r').style.opacity = 1; }, text || ref ? 120 : 0); };
@@ -214,7 +233,7 @@ const SAMPLE = {
 };
 const B=[["Genesis","genesis"],["Exodus","exodus"],["Leviticus","leviticus"],["Numbers","numbers"],["Deuteronomy","deuteronomy"],["Joshua","joshua"],["Judges","judges"],["Ruth","ruth"],["1 Samuel","1 samuel"],["2 Samuel","2 samuel"],["1 Kings","1 kings"],["2 Kings","2 kings"],["1 Chronicles","1 chronicles"],["2 Chronicles","2 chronicles"],["Ezra","ezra"],["Nehemiah","nehemiah"],["Esther","esther"],["Job","job"],["Psalms","psalms?"],["Proverbs","proverbs?"],["Ecclesiastes","ecclesiastes"],["Song of Solomon","song of (?:solomon|songs)|songs of solomon"],["Isaiah","isaiah"],["Jeremiah","jeremiah"],["Lamentations","lamentations"],["Ezekiel","ezekiel"],["Daniel","daniel"],["Hosea","hosea"],["Joel","joel"],["Amos","amos"],["Obadiah","obadiah"],["Jonah","jonah"],["Micah","micah"],["Nahum","nahum"],["Habakkuk","habakkuk"],["Zephaniah","zephaniah"],["Haggai","haggai"],["Zechariah","zechariah"],["Malachi","malachi"],["Matthew","matthew"],["Mark","mark"],["Luke","luke"],["John","john"],["Acts","acts"],["Romans","romans"],["1 Corinthians","1 corinthians"],["2 Corinthians","2 corinthians"],["Galatians","galatians"],["Ephesians","ephesians"],["Philippians","philippians"],["Colossians","colossians"],["1 Thessalonians","1 thessalonians"],["2 Thessalonians","2 thessalonians"],["1 Timothy","1 timothy"],["2 Timothy","2 timothy"],["Titus","titus"],["Philemon","philemon"],["Hebrews","hebrews"],["James","james"],["1 Peter","1 peter"],["2 Peter","2 peter"],["1 John","1 john"],["2 John","2 john"],["3 John","3 john"],["Jude","jude"],["Revelation","revelations?"]];
 const RX = B.map(([name, src]) => [name, new RegExp(
-  '(?<![a-z0-9])' + (/^\d/.test(src) ? '' : '(?<!\\d\\s)') + '(?:' + src.replace(/ /g, '\\s+') + ')(?![a-z])\\s*(?:chapter\\s+)?(\\d{1,3})(?:\\s*(?:verses?|v)?\\s*(\\d{1,3}))?(?:\\s*(?:through|thru|to|and|dash)\\s*(\\d{1,3}))?', 'g')]);
+  '(?<![a-z0-9])' + (src === 'john' ? '(?<![123]\\s)' : '') + '(?:' + src.replace(/ /g, '\\s+') + ')(?![a-z])\\s*(?:chapter\\s+)?(\\d{1,3})(?:\\s*(?:verses?|v)?\\s*(\\d{1,3}))?(?:\\s*(?:through|thru|to|and|dash)\\s*(\\d{1,3}))?', 'g')]);
 
 /* ---------- SPOKEN-NUMBER + REFERENCE PARSER ---------- */
 const U={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
@@ -222,10 +241,16 @@ const T={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,nin
 const ORD={first:1,second:2,third:3,'1st':1,'2nd':2,'3rd':3};
 const unit = w => w in U && U[w] >= 1 && U[w] <= 9;
 function normalize(s) {
-  const t = s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').trim().split(/\s+/), out = [];
+  const t = s.toLowerCase().replace(/['\u2019]/g, '').replace(/[^a-z0-9 ]+/g, ' ').trim().split(/\s+/), out = [];
   for (let i = 0; i < t.length; i++) {
     const w = t[i]; let n = null;
+    if (w === 'oh' && unit(t[i + 1]) && out.length && /^[1-9]$/.test(out[out.length - 1])) { out[out.length - 1] = String(out[out.length - 1] * 100 + U[t[i + 1]]); i++; continue; }
     if (w in ORD) n = ORD[w];
+    else if (w === 'one' && /^psalms?$/.test(t[i - 1] || '') && (t[i + 1] in T || (t[i + 1] in U && U[t[i + 1]] >= 10))) {
+      let v = t[i + 1] in T ? T[t[i + 1]] : U[t[i + 1]]; i++;
+      if (v >= 20 && unit(t[i + 1])) { v += U[t[i + 1]]; i++; }
+      n = 100 + v;
+    }
     else if (w in T) { n = T[w]; if (unit(t[i+1])) n += U[t[++i]]; }
     else if (w in U) {
       n = U[w];
@@ -274,31 +299,40 @@ const BIBLES = { KJV: SAMPLE }; let ver = 'KJV';
 const status = t => $('status').textContent = t;
 
 let cur = null;   // position of the verse on screen, used by Previous / Next
+let markMode = 'hl';   // what a drag across the verse does: 'hl' highlight, 'jx' Jesus spoke
 function renderLive() {
   $('live').innerHTML = current
     ? `<b>${current.ref}</b><div id="lt">${markup(current.text, current.marks)}</div>
-       <p class="hint">Drag across words, then click a mark. "Jesus spoke" with nothing selected marks the whole verse.</p>
-       <button id="mhl">Highlight</button> <button id="mjx">Jesus spoke</button> <button id="mcl">Remove marks</button><br>
+       <p class="hint">Pick a mark, then drag across the words above. It shows on the screen straight away.</p>
+       <button id="mhl" class="${markMode === 'hl' ? 'on' : ''}">Highlight</button> <button id="mjx" class="${markMode === 'jx' ? 'on' : ''}">Jesus spoke</button> <button id="mall">Whole verse</button> <button id="mcl">Remove marks</button><br>
        <button id="prv">&larr; Previous verse</button> <button id="nxt">Next verse &rarr;</button> <button id="clr">Clear</button>`
     : '<b>On display now</b><div>Nothing showing</div>';
   if (current) {
     $('clr').onclick = clearLive; $('nxt').onclick = () => step(1); $('prv').onclick = () => step(-1);
-    $('mhl').onclick = () => mark('hl'); $('mjx').onclick = () => mark('jx');
+    $('mhl').onclick = () => { markMode = 'hl'; renderLive(); };
+    $('mjx').onclick = () => { markMode = 'jx'; renderLive(); };
+    $('mall').onclick = () => mark(markMode, true);
     $('mcl').onclick = () => { current.marks = []; pushMarks(); };
-    document.querySelectorAll('#live button').forEach(b => b.onmousedown = e => e.preventDefault());   // keep the text selection
+    $('lt').onmouseup = () => setTimeout(() => { const sel = getSelection(); if (sel.rangeCount && !sel.isCollapsed) mark(markMode); }, 0);
+    document.querySelectorAll('#live button').forEach(b => b.onmousedown = e => e.preventDefault());
   }
 }
 function pushMarks() { send({ type: 'verse', ref: current.ref, text: current.text, marks: current.marks }); renderLive(); }
-function mark(t) {
+function mark(t, whole) {
   if (!current) return;
-  const box = $('lt'), sel = getSelection(); let s = 0, e = current.text.length;
-  if (sel.rangeCount && !sel.isCollapsed && box.contains(sel.anchorNode) && box.contains(sel.focusNode)) {
+  let s = 0, e = current.text.length;
+  if (!whole) {
+    const box = $('lt'), sel = getSelection();
+    if (!(sel.rangeCount && !sel.isCollapsed && box.contains(sel.anchorNode) && box.contains(sel.focusNode))) { status('Drag across the words in the verse box first.'); return; }
     const r = sel.getRangeAt(0), pre = document.createRange();
     pre.selectNodeContents(box); pre.setEnd(r.startContainer, r.startOffset);
     s = pre.toString().length; e = s + r.toString().length;
     const seg = current.text.slice(s, e); s += seg.length - seg.trimStart().length; e -= seg.length - seg.trimEnd().length;
     if (e <= s) return;
-  } else if (t === 'hl') { status('Drag across the words you want to highlight first.'); return; }
+    const W = /[A-Za-z'\u2019]/, T = current.text;       // snap to whole words
+    while (s > 0 && W.test(T[s - 1]) && W.test(T[s])) s--;
+    while (e < T.length && W.test(T[e]) && W.test(T[e - 1])) e++;
+  }
   current.marks = current.marks.filter(m => m.e <= s || m.s >= e).concat({ s, e, t });
   pushMarks();
 }
@@ -313,7 +347,7 @@ function step(d) {
   if (!text) { status(d > 0 ? 'No next verse in the loaded text.' : 'No previous verse in the loaded text.'); return; }
   cur = { book, c, v }; const L = `${key} (${ver})`; addFound(L, text, cur); show(L, text);
 }
-function show(ref, text) { current = { ref, text, marks: [] }; send({ type: 'verse', ref, text, marks: [] }); renderLive(); }
+function show(ref, text) { hideSugg(); current = { ref, text, marks: [] }; send({ type: 'verse', ref, text, marks: [] }); renderLive(); }
 function clearLive() { current = null; cur = null; send({ type: 'clear' }); renderLive(); }
 
 function addFound(ref, text, pos) {
@@ -333,12 +367,31 @@ function commit(r, force) {
   addFound(L, text, pos);
   if (force || $('auto').checked) { cur = pos; show(L, text); }
 }
-let tail = '', tailT = 0;
+let tail = '', tailT = 0, nextT = 0;
+// Spoken follow-ups once a verse is on screen: "verse 5", "chapter 4 verse 2", "verses 5 to 7", "next verse"
+function voiceCmd(t, final) {
+  const mode = $('voice').value;
+  if (mode === 'off' || !cur || parseRef(t)) return false;           // a spoken book name always wins
+  const s = normalize(t.replace(/(\d)\s*[-–]\s*(\d)/g, '$1 through $2')); let hit = null;
+  const rx = /(?:chapter\s+(\d{1,3})\s+)?(?<![a-z])verses?\s+(\d{1,3})(?:\s+(?:through|thru|to|and|dash)\s+(\d{1,3}))?/g;
+  for (const x of s.matchAll(rx)) hit = x;
+  if (hit) {
+    const v = +hit[2], v2 = hit[3] ? +hit[3] : null; if (v > 176) return false;
+    const r = { book: cur.book, c: hit[1] ? +hit[1] : cur.c, v, v2: v2 && v2 > v && v2 - v <= 8 ? v2 : null };
+    const key = keyOf(r); if (key === lastKey && Date.now() - lastT < 15000) return true;
+    clearTimeout(pend); pend = setTimeout(() => commit(r), final ? 0 : 300); return true;
+  }
+  if (mode === 'next' && /(?<![a-z])next verse(?![a-z])/.test(s) && Date.now() - nextT > 3000) {
+    nextT = Date.now(); if ($('auto').checked) step(1); else status('Heard "next verse". Press Next.'); return true;
+  }
+  return false;
+}
 function handleText(t, final) {
   if (Date.now() - tailT > 6000) tail = '';
+  if (voiceCmd(t, final)) { if (final) { tail = ''; tailT = Date.now(); } return; }
   const r = parseRef(tail + ' ' + t);
   if (final) { tail = (tail + ' ' + t).trim().split(/\s+/).slice(-8).join(' '); tailT = Date.now(); }
-  if (!r) return;
+  if (!r) { if (final) suggest(t); return; }
   if (!final && r.v === null) return;                // wait for the verse number on partial results
   const key = keyOf(r);
   if (key === lastKey && Date.now() - lastT < 15000) return;
@@ -367,6 +420,69 @@ function startRec() {
   rec.onend = () => { if (listening) try { rec.start(); } catch { } };
   rec.start();
 }
+/* ---- "Did you mean?" suggestions: misheard book names, and quoted text with no reference ---- */
+const STOP = new Set('a an and are as at be but by for from had has have he her him his i in is it its me my not of on or our she so that the their them they this to us was we were what when which who will with you your thou thee thy thine hath unto shall ye said say saith upon came come then there if all'.split(' '));
+const BASES = B.map(([n]) => ({ name: n, base: n.replace(/^\d\s/, '').toLowerCase().replace(/[^a-z]/g, ''), pre: /^\d/.test(n) ? +n[0] : 0 }));
+let IDX = null, qwin = [], qT = 0, sgT = null, SG = [];
+const words = t => t.toLowerCase().replace(/[^a-z' ]+/g, ' ').split(/\s+/).filter(Boolean);
+function lev(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)); return d[a.length][b.length]; }
+const sim = (a, b) => 1 - lev(a, b) / Math.max(a.length, b.length);
+const ck = x => (x[0] || '') + x.slice(1).replace(/ck/g, 'k').replace(/c/g, 'k').replace(/[aeiouyhw]/g, '').replace(/(.)\1+/g, '$1');
+function buildIdx() {
+  const keys = Object.keys(DB), post = new Map();
+  keys.forEach((k, i) => { const seen = new Set(); for (const w of words(DB[k])) if (!STOP.has(w) && !seen.has(w)) { seen.add(w); let a = post.get(w); if (!a) post.set(w, a = []); a.push(i); } });
+  IDX = { keys, post, N: keys.length };
+}
+function quoteSuggest(ws) {
+  if (ws.length < 3) return [];
+  if (!IDX) buildIdx();
+  const q = [...new Set(ws)].filter(w => IDX.post.has(w)); if (q.length < 3) return [];
+  const sc = new Map(), mc = new Map(); let total = 0;
+  for (const w of q) { const x = Math.log(1 + IDX.N / IDX.post.get(w).length); total += x;
+    for (const i of IDX.post.get(w)) { sc.set(i, (sc.get(i) || 0) + x); mc.set(i, (mc.get(i) || 0) + 1); } }
+  const hits = []; for (const [i, v] of sc) if (mc.get(i) >= 3 && v / total >= 0.55 && mc.get(i) / q.length >= 0.5) hits.push([i, v]);
+  hits.sort((a, b) => b[1] - a[1]);
+  return hits.slice(0, 3).map(([i]) => { const key = IDX.keys[i], m = key.match(/^(.*) (\d+):(\d+)$/); return { book: m[1], c: +m[2], v: +m[3], key }; });
+}
+function refSuggest(raw) {                          // "have a cook 3 1" -> Habakkuk 3:1
+  const tk = normalize(raw).split(' '), out = new Map();
+  tk.forEach((tok, i) => {
+    if (!/^\d{1,3}$/.test(tok)) return;
+    let j = i - 1; if (tk[j] === 'chapter') j--;
+    for (let n = 1; n <= 3 && j - n + 1 >= 0; n++) {
+      const ph = tk.slice(j - n + 1, j + 1); if (ph.some(w => /\d/.test(w) || /^(chapter|verse|verses)$/.test(w))) break;
+      const cand = ph.join(''); if (cand.length < 3) continue;
+      const pre = /^[123]$/.test(tk[j - n]) ? +tk[j - n] : 0;
+      let v = null, q = i + 1; if (/^(verse|verses|v)$/.test(tk[q])) q++; if (/^\d{1,3}$/.test(tk[q])) v = +tk[q];
+      BASES.forEach(b => {
+        if (pre && b.pre && b.pre !== pre) return;
+        const sc = Math.max(sim(cand, b.base), b.base.length > 2 ? 0.95 * sim(ck(cand), ck(b.base)) : 0); if (sc < 0.62) return;
+        const key = `${b.name} ${tok}:${v || 1}`; if (!DB[key]) return;
+        const old = out.get(key); if (!old || old.sc < sc) out.set(key, { book: b.name, c: +tok, v, sc, key });
+      });
+    }
+  });
+  return [...out.values()].sort((x, y) => y.sc - x.sc).slice(0, 3);
+}
+function hideSugg() { SG = []; qwin = []; clearTimeout(sgT); $('sugg').hidden = true; }
+function showSugg(list) {
+  SG = list; const box = $('sglist'); box.innerHTML = '';
+  list.forEach((r, i) => { const row = document.createElement('div'); row.className = 'sg';
+    row.innerHTML = `<kbd>${i + 1}</kbd><div><strong>${r.key}</strong>${esc((DB[r.key] || '').slice(0, 110))}</div><button>Show</button>`;
+    row.querySelector('button').onclick = () => { commit(r, true); hideSugg(); }; box.append(row); });
+  $('sugg').hidden = false; clearTimeout(sgT); sgT = setTimeout(hideSugg, 25000);
+}
+function suggest(t) {
+  let list = refSuggest(t);
+  if (!list.length) {
+    if (Date.now() - qT > 10000) qwin = []; qT = Date.now();
+    qwin = qwin.concat(words(t).filter(w => !STOP.has(w))).slice(-14); list = quoteSuggest(qwin);
+  }
+  if (current) list = list.filter(r => current.ref.indexOf(r.key) !== 0);
+  if (list.length) showSugg(list.slice(0, 3));
+}
+
 /* ---- Deepgram streaming (nova-3, book names boosted with keyterms) ---- */
 const KT = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','Samuel','Kings','Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','Corinthians','Galatians','Ephesians','Philippians','Colossians','Thessalonians','Timothy','Titus','Philemon','Hebrews','James','Peter','Jude','Revelation'];
 let ws = null, media = null, mr = null, buf = '';
@@ -383,11 +499,11 @@ fillDevs();
 function meter(an) { const d = new Uint8Array(an.fftSize);
   const tick = () => { an.getByteTimeDomainData(d); let m = 0; for (const x of d) m = Math.max(m, Math.abs(x - 128) / 128); $('lvl').value = m; raf = requestAnimationFrame(tick); }; tick(); }
 function stopAll() {
-  rec && rec.stop(); if (ws) { ws.onclose = null; ws.close(); ws = null; }
+  rec && rec.stop(); if (mr && mr.state !== 'inactive') mr.stop(); mr = null; if (ws) { ws.onclose = null; ws.close(); ws = null; }
   cancelAnimationFrame(raf); $('lvl').value = 0; if (ac) { ac.close(); ac = null; }
   media && media.getTracks().forEach(t => t.stop()); media = null; buf = '';
 }
-async function startDG() {
+async function startDG(low) {
   const key = $('dgkey').value.trim();
   if (!key) { status('Paste your Deepgram API key first.'); return false; }
   try { if (key !== defKey) localStorage.setItem('dgkey', key); else localStorage.removeItem('dgkey'); } catch { }
@@ -398,7 +514,7 @@ async function startDG() {
     ac = new AudioContext(); await ac.resume();
     const src = ac.createMediaStreamSource(media), an = ac.createAnalyser(), sp = ac.createScriptProcessor(2048, 1, 1), g = ac.createGain(), ratio = ac.sampleRate / 16000;
     sp.onaudioprocess = e => {                       // downsample to 16 kHz mono PCM and stream it
-      if (!ws || ws.readyState !== 1) return;
+      if (low || !ws || ws.readyState !== 1) return;
       const inp = e.inputBuffer.getChannelData(0), n = Math.floor(inp.length / ratio), out = new Int16Array(n);
       for (let i = 0; i < n; i++) { const a = Math.floor(i * ratio), b = Math.max(a + 1, Math.floor((i + 1) * ratio)); let sum = 0;
         for (let k = a; k < b; k++) sum += inp[k]; const x = Math.max(-1, Math.min(1, sum / (b - a))); out[i] = x < 0 ? x * 32768 : x * 32767; }
@@ -406,11 +522,13 @@ async function startDG() {
     };
     g.gain.value = 0; src.connect(sp); src.connect(an); sp.connect(g); g.connect(ac.destination); meter(an);
   } catch (e) { status('Audio setup failed: ' + (e.name || '') + ' ' + (e.message || '')); stopAll(); return false; }
-  const q = new URLSearchParams({ model: 'nova-3', language: 'en', encoding: 'linear16', sample_rate: '16000', channels: '1', interim_results: 'true', smart_format: 'true', punctuate: 'true', endpointing: '300' });
+  const q = new URLSearchParams(Object.assign({ model: 'nova-3', language: 'en', interim_results: 'true', smart_format: 'true', punctuate: 'true', endpointing: '300' }, low ? {} : { encoding: 'linear16', sample_rate: '16000', channels: '1' }));
   KT.forEach(k => q.append('keyterm', k));
   let opened = false;
   ws = new WebSocket('wss://api.deepgram.com/v1/listen?' + q.toString().replace(/\+/g, '%20'), ['token', key]);
-  ws.onopen = () => { opened = true; status('Listening (Deepgram)…'); };
+  ws.onopen = () => { opened = true; status(low ? 'Listening (Deepgram, low data)…' : 'Listening (Deepgram)…');
+    if (low) { mr = new MediaRecorder(media, { mimeType: 'audio/webm;codecs=opus', audioBitsPerSecond: 24000 });
+      mr.ondataavailable = e => { if (e.data.size && ws && ws.readyState === 1) ws.send(e.data); }; mr.start(100); } };
   ws.onmessage = ev => {
     const d = JSON.parse(ev.data); if (d.type !== 'Results') return;
     const t = ((d.channel.alternatives[0] || {}).transcript || '').trim();
@@ -423,30 +541,59 @@ async function startDG() {
   };
   ws.onerror = () => status(opened ? 'Deepgram connection error.' : 'Could not connect to Deepgram. Check the API key and internet.');
   ws.onclose = () => { stopAll();
-    if (listening && opened) { status('Reconnecting…'); setTimeout(() => listening && startDG(), 1000); }
+    if (listening && opened) { status('Reconnecting…'); setTimeout(() => listening && startDG(low), 1000); }
     else if (listening) { listening = false; setMicUI(); } };
   return true;
+}
+let sawCaption = false;
+function startVosk() {                       // talks to offline/vosk_refs.py on this computer
+  return new Promise(resolve => {
+    let opened = false; sawCaption = false;
+    ws = new WebSocket('ws://127.0.0.1:8765');
+    ws.onopen = () => { opened = true; status('Listening (offline helper)…'); resolve(true); };
+    ws.onmessage = ev => {
+      const d = JSON.parse(ev.data);
+      if (d.type === 'level') { $('lvl').value = Math.min(1, d.v * 4); return; }
+      const t = (d.text || '').replace(/\[unk\]/g, ' ').replace(/\s+/g, ' ').trim(); if (!t) return;
+      const fin = d.type === 'final';
+      if (d.kind === 'refs') { handleText(t, fin); if (sawCaption) return; }
+      else { sawCaption = true; if (fin && !parseRef(t)) suggest(t); }
+      if (fin) { lines.push(t); renderCaps(''); } else renderCaps(t);
+      send({ type: 'cap', text: t });
+    };
+    ws.onerror = () => { if (!opened) { status('Offline helper is not running. Start it first (see offline/README.txt).'); resolve(false); } };
+    ws.onclose = () => { stopAll();
+      if (listening && opened) { status('Offline helper disconnected. Reconnecting…'); setTimeout(() => listening && startVosk(), 1500); }
+      else if (listening) { listening = false; setMicUI(); } };
+  });
 }
 function setMicUI() { $('mic').classList.toggle('on', listening); $('mic').textContent = listening ? 'Stop listening' : 'Start listening'; }
 $('mic').onclick = async () => {
   if (listening) { listening = false; stopAll(); status(''); setMicUI(); return; }
   listening = true; setMicUI();
   let ok = true;
-  if ($('engine').value === 'dg') ok = await startDG(); else { status('Listening…'); startRec(); }
+  const eng = $('engine').value;
+  if (eng === 'dg' || eng === 'dgl') ok = await startDG(eng === 'dgl'); else if (eng === 'vosk') ok = await startVosk(); else { status('Listening…'); startRec(); }
   if (!ok) { listening = false; setMicUI(); }
 };
 function sizePv() { const w = $('pv').clientWidth, h = $('style').value === 'bar' ? 280 : 720, k = w / 1280;
   $('pvf').style.height = h + 'px'; $('pvf').style.transform = `scale(${k})`; $('pv').style.height = (h * k) + 'px'; }
 $('pvf').src = location.href.split('#')[0] + '#display'; addEventListener('resize', sizePv); sizePv();
 $('style').onchange = e => { send({ type: 'style', style: e.target.value }); sizePv(); };
-const look = () => ({ theme: $('theme').value, font: $('font').value, csize: $('csize').value });
-['theme', 'font', 'csize'].forEach(i => $(i).onchange = () => send({ type: 'look', ...look() }));
+const PAL = { classic: ['#9fd3e6', '#fff27a'], royal: ['#a9b6f2', '#e8f7a8'], sunrise: ['#ffc2a8', '#fff27a'], forest: ['#b5e6cc', '#fff27a'], light: ['#cdb4f0', '#fff27a'] };
+const look = () => ({ theme: $('theme').value, font: $('font').value, csize: $('csize').value, tb: $('cTb').value, ac: $('cAc').value });
+const pushLook = () => { send({ type: 'look', ...look() }); try { localStorage.setItem('look', JSON.stringify(look())); } catch { } };
+['font', 'csize'].forEach(i => $(i).onchange = pushLook);
+['cTb', 'cAc'].forEach(i => $(i).oninput = pushLook);
+$('theme').onchange = () => { const p = PAL[$('theme').value]; if (p) { $('cTb').value = p[0]; $('cAc').value = p[1]; } pushLook(); };
+try { const L = JSON.parse(localStorage.getItem('look') || 'null');
+  if (L) { $('theme').value = L.theme; $('font').value = L.font; $('csize').value = L.csize; $('cTb').value = L.tb; $('cAc').value = L.ac; } } catch { }
 const SOURCES = {
   KJV: 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json',
   BBE: 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_bbe.json' };
 function fillVer() { $('ver').innerHTML = Object.keys(BIBLES).map(n => `<option>${n}</option>`).join(''); $('ver').value = ver; }
 function setVer(n) {
-  if (!BIBLES[n]) return; ver = n; DB = BIBLES[n]; $('ver').value = n;
+  if (!BIBLES[n]) return; ver = n; DB = BIBLES[n]; IDX = null; $('ver').value = n;
   try { localStorage.setItem('ver', n); } catch { }
   if (cur && current) { const k = `${cur.book} ${cur.c}:${cur.v}`; if (DB[k]) show(`${k} (${ver})`, DB[k]); else status(`${k} isn't in ${ver}.`); }
 }
@@ -505,6 +652,7 @@ ch.onmessage = ({ data: m }) => {
 document.onkeydown = e => {
   if (e.key === 'Escape') clearLive();
   if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if (/^[1-3]$/.test(e.key) && SG[+e.key - 1]) { commit(SG[+e.key - 1], true); hideSugg(); return; }
   if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); step(1); }
   if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); step(-1); }
 };
@@ -513,6 +661,13 @@ document.onkeydown = e => {
   const names = (await idbGet('versions')) || [], legacy = await idbGet('kjv');
   if (legacy && !names.includes('KJV')) { await idbSet('bible:KJV', legacy); names.push('KJV'); await idbSet('versions', names); }
   for (const n of names) { const o = await idbGet('bible:' + n); if (o) BIBLES[n] = o; }
+  if (window.appConfig && appConfig.bibles) {
+    try { for (const f of await appConfig.bibles()) {
+      const nm = f.file.replace(/\.json$/i, '').split(/[_-]/).pop().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10) || 'CUSTOM';
+      if (BIBLES[nm] && BIBLES[nm] !== SAMPLE) continue;
+      try { await addVersion(nm, await parseBible(f.text)); names.push(nm); } catch { }
+    } } catch { }
+  }
   fillVer();
   let want = 'KJV'; try { want = localStorage.getItem('ver') || 'KJV'; } catch { }
   setVer(BIBLES[want] ? want : Object.keys(BIBLES)[0]);

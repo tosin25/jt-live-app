@@ -123,3 +123,11 @@ Prayer mode look, Pastor/Song modes, song library with lyric matching, OBS link,
 - First pass of the hard blocky shadow on buttons, the live panel, the preview and the welcome button.
 - Title bar dots now use the macOS colours (red, yellow, green). Title uses the pixel font Silkscreen.
 - Fonts (Syne, Silkscreen) load from Google Fonts. Offline they fall back to plain fonts. Todo: bundle the font files in the app.
+
+## Final picks for the overlay bar (3 Oct 2026) and built in v0.2.2
+- Style A (window card), chosen: serif verse font (current), macOS-colour dots, chunky block shadow (bottom-left, as in reference 1), Silkscreen pixel title, highlight and "Jesus spoke" marks, themes.
+- Colour control: Theme sets a starting palette; the "Bar" and "Pill" colour pickers fine-tune the title bar and the highlight/reference pill. Choices are remembered on that computer.
+- Prev / Next / Clear are yellow pixel-font buttons with the block shadow, shown on hover.
+- Not used: square pixel window buttons, pixel verse font.
+- Style B (taped paper), saved for later as an optional alternative style: cream paper with torn orange tape at the corners, blue ink, italic serif reference on the left with a thin rule, verse on the right, small uppercase label "Jesus Tabernacle / Sunday service". Reference image from Tosin (3 Oct 2026). Needs a transparent overlay window with margins for the tape.
+- Todo before Sunday: bundle Silkscreen and Syne fonts in the app so the bar looks the same offline.
